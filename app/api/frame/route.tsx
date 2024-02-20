@@ -2,11 +2,14 @@ import { FrameRequest, getFrameMessage, getFrameHtmlResponse } from '@coinbase/o
 import { NextRequest, NextResponse } from 'next/server';
 import { NEXT_PUBLIC_URL } from '../../config';
 
-const word = 'hello';
+const word = 'hangman';
+const lifes = 5;
+
+var guesses = new Set<string>();
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   let accountAddress: string | undefined = '';
-  let guesses: string | undefined = '';
+  let guessesString = '';
 
   const body: FrameRequest = await req.json();
   const { isValid, message } = await getFrameMessage(body, { neynarApiKey: 'NEYNAR_ONCHAIN_KIT' });
@@ -16,7 +19,12 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   }
 
   if (message?.input) {
-    guesses = message.input;
+    const letter = message.input.toLowerCase();
+    if (isLetter(letter)) {
+      guesses.add(letter);
+    }
+    const guessesArray = Array.from(guesses);
+    guessesString = guessesArray.join('');
   }
 
   return new NextResponse(
@@ -29,7 +37,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           label: 'Submit',
         },
       ],
-      image: `${NEXT_PUBLIC_URL}/api/game?guesses=${guesses}&word=${word}`,
+      image: `${NEXT_PUBLIC_URL}/api/game?guesses=${guessesString}&word=${word}&lifes=${lifes}`,
       input: {
         text: 'Letter',
       },
