@@ -10,10 +10,6 @@ const frameMetadata = getFrameMetadata({
   ],
   image: {
     src: `${NEXT_PUBLIC_URL}/cover.png`,
-    aspectRatio: '1:1',
-  },
-  input: {
-    text: 'Letter',
   },
   postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
 });
