@@ -9,7 +9,7 @@ const frameMetadata = getFrameMetadata({
     },
   ],
   image: {
-    src: `${NEXT_PUBLIC_URL}/cover.png`,
+    src: `${NEXT_PUBLIC_URL}/hangman.png`,
   },
   postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
 });
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Welcome',
     description: 'Hello Casters',
-    images: [`${NEXT_PUBLIC_URL}/cover.png`],
+    images: [`${NEXT_PUBLIC_URL}/hangman.png`],
   },
   other: {
     ...frameMetadata,

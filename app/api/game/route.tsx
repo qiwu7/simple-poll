@@ -5,7 +5,7 @@ export async function GET(request: Request) {
 
     // ?word=<word>&guesses=<guesses>
     const word = searchParams.get('word') || 'hangman';
-    const guesses = searchParams.get('guesses')?.split('') || ['h', 'a'];
+    const guesses = searchParams.get('guesses')?.split('') || ['a', 'e'];
     const lifes = Number(searchParams.get('lifes')) || 5;
 
     return new ImageResponse(
