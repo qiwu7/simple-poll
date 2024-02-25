@@ -11,7 +11,7 @@ const frameMetadata = getFrameMetadata({
   image: {
     src: `${NEXT_PUBLIC_URL}/hangman.png`,
   },
-  postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
+  postUrl: `${NEXT_PUBLIC_URL}/api/start-game`,
 });
 
 export const metadata: Metadata = {
