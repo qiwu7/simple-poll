@@ -7,7 +7,8 @@ export async function GET(request: Request) {
   const word = searchParams.get('word') || 'hangman';
   const guesses = searchParams.get('guesses')?.split('') || ['a', 'e'];
   const lifesLeft = Number(searchParams.get('lifes')) || 5;
-  const win : boolean = searchParams.get('win') === 'true';
+  const win = searchParams.get('win');
+  console.log(`win ${win}, win === true ${win === 'true'}`);
 
   return new ImageResponse(
     (
