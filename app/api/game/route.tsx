@@ -24,24 +24,10 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
   if (message?.input && game) {
     const letter = message.input.toLowerCase();
-    console.log(`event: gameId ${game.gameId}, letter: ${letter}, guesses: ${game.guesses}`);
-    console.log(game.guesses.has('a'));
-
     if (isLetter(letter)) {
-      game.guesses.add(letter);
+      await updateGameStates(game, letter);
     }
-    if (game.word.includes(letter)) {
-      game.matches.add(letter);
-    } else {
-      game.lifesLeft--;
-    }
-    if (hasWon(game.word, game.guesses)) {
-      game.win = true;
-    }
-    await updateGame(game);
   }
-
-  const guessesString = game ? Array.from(game.guesses).join('') : '';
 
   return new NextResponse(
     getFrameHtmlResponse({
@@ -50,7 +36,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           label: 'Submit',
         },
       ],
-      image: `${NEXT_PUBLIC_URL}/api/image/game?guesses=${guessesString}&word=${game?.word}&lifes=${game?.lifesLeft}&win=${game?.win}`,
+      image: `${NEXT_PUBLIC_URL}/api/image/game?guesses=${game?.guesses}&word=${game?.word}&lifes=${game?.lifesLeft}&win=${game?.win}`,
       input: {
         text: 'Letter',
       },
@@ -69,12 +55,26 @@ function isLetter(str: string) {
   return str.length === 1 && str.match(/[a-zA-Z]/i);
 }
 
-function hasWon(word: string, guesses: Set<String>): boolean {
+function hasWon(word: string, guesses: string): boolean {
   for (let char of word) {
-    if (!guesses.has(char)) {
+    if (!guesses.includes(char)) {
       return false;
     }
   }
 
   return true;
+}
+
+async function updateGameStates(game: Game, letter: string) {
+  if (game.guesses.includes(letter)) {
+    return;
+  }
+  game.guesses = game.guesses + letter;
+  if (!game.word.includes(letter)) {
+    game.lifesLeft--;
+  }
+  if (hasWon(game.word, game.guesses)) {
+    game.win = true;
+  }
+  await updateGame(game);
 }

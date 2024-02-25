@@ -8,8 +8,7 @@ export async function createNewGame(playerId: number, word: string): Promise<Gam
     count + 1,
     playerId,
     word,
-    new Set<string>(),
-    new Set<string>(),
+    '',
     TOTAL_LIFES,
     TOTAL_LIFES,
     false,
@@ -21,7 +20,6 @@ export async function createNewGame(playerId: number, word: string): Promise<Gam
 
 export async function getGame(playerId: number, gameId?: number): Promise<Game | undefined> {
   if (gameId) {
-    console.log(`using game id ${gameId}`);
     return (await collections.games?.findOne({ gameId: gameId })) || undefined;
   }
 
@@ -31,7 +29,6 @@ export async function getGame(playerId: number, gameId?: number): Promise<Game |
     .limit(1)
     .toArray();
   if (res && res.length > 0) {
-    console.log(`found game with ${res[0].gameId}`);
     return res[0];
   }
 }
