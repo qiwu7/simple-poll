@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { NEXT_PUBLIC_URL } from '../../config';
 import { connectToDB } from '../../services/database.services';
 import { createNewGame } from '../../services/games.services';
-import Game from '../../models/game';
+import { Game, TOTAL_LIFES } from '../../models/game';
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   const body: FrameRequest = await req.json();

@@ -1,7 +1,7 @@
 // External Dependencies
 import * as mongoDB from 'mongodb';
 import * as dotenv from 'dotenv';
-import Game from '../models/game';
+import { Game } from '../models/game';
 
 // Global Variables
 export const collections: { games?: mongoDB.Collection<Game> } = {};

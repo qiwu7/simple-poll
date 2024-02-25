@@ -1,6 +1,8 @@
 import { ObjectId } from 'mongodb';
 
-export default class Game {
+export const TOTAL_LIFES = 5;
+
+export class Game {
   constructor(
     public gameId: number,
     public playerId: number,

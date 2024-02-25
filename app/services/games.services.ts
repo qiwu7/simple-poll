@@ -1,5 +1,5 @@
 import { collections, connectToDB } from './database.services';
-import Game from '../models/game';
+import { Game, TOTAL_LIFES } from '../models/game';
 
 export async function createNewGame(playerId: number, word: string): Promise<Game> {
   await connectToDB();
@@ -10,8 +10,8 @@ export async function createNewGame(playerId: number, word: string): Promise<Gam
     word,
     new Set<string>(),
     new Set<string>(),
-    5,
-    5,
+    TOTAL_LIFES,
+    TOTAL_LIFES,
     false,
   );
   const res = await collections.games?.insertOne(game);

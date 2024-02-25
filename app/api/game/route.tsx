@@ -1,7 +1,7 @@
 import { FrameRequest, getFrameMessage, getFrameHtmlResponse } from '@coinbase/onchainkit';
 import { NextRequest, NextResponse } from 'next/server';
 import { NEXT_PUBLIC_URL } from '../../config';
-import Game from '../../models/game';
+import { Game } from '../../models/game';
 import { getGame, updateGame } from '../../services/games.services';
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
