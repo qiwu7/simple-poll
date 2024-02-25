@@ -1,9 +1,10 @@
 // External Dependencies
 import * as mongoDB from 'mongodb';
 import * as dotenv from 'dotenv';
+import Game from '../models/game';
 
 // Global Variables
-export const collections: { games?: mongoDB.Collection } = {};
+export const collections: { games?: mongoDB.Collection<Game> } = {};
 
 // Initialize Connection
 export async function connectToDB() {
@@ -13,7 +14,7 @@ export async function connectToDB() {
   await client.connect();
 
   const db: mongoDB.Db = client.db(process.env.DB_NAME);
-  const gamesCollection: mongoDB.Collection = db.collection(
+  const gamesCollection: mongoDB.Collection<Game> = db.collection<Game>(
     process.env.GAMES_COLLECTION_NAME as string,
   );
 

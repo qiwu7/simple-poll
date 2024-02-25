@@ -1,9 +1,8 @@
 import { getFrameMetadata } from '@coinbase/onchainkit';
 import type { Metadata } from 'next';
 import { NEXT_PUBLIC_URL } from './config';
-import { collections } from './services/database.services';
-import Game from './models/game';
-import { connectToDB } from './services/database.services';
+import { createNewGame } from './services/games.services';
+import { connectToDB, collections } from './services/database.services';
 
 const frameMetadata = getFrameMetadata({
   buttons: [
@@ -29,14 +28,6 @@ export const metadata: Metadata = {
     ...frameMetadata,
   },
 };
-
-connectToDB()
-  .then(() => {
-    return collections.games?.count();
-  })
-  .then((res) => {
-    console.log(res);
-  });
 
 export default function Page() {
   return (

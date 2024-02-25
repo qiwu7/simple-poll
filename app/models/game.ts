@@ -3,10 +3,10 @@ import { ObjectId } from 'mongodb';
 export default class Game {
   constructor(
     public gameId: number,
-    public player: string,
+    public playerId: number,
     public word: string,
-    public guesses: string,
-    public matches: string,
+    public guesses: Set<string>,
+    public matches: Set<string>,
     public totalLifes: number,
     public lifesLeft: number,
     public win: boolean,
