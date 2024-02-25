@@ -25,8 +25,22 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   if (message?.input && game) {
     const letter = message.input.toLowerCase();
     if (isLetter(letter)) {
-      await updateGameStates(game, letter);
+      game = await updateGameStates(game, letter);
     }
+  }
+
+  if (game?.win) {
+    return new NextResponse(
+      getFrameHtmlResponse({
+        buttons: [
+          {
+            label: 'New Game',
+          },
+        ],
+        image: `${NEXT_PUBLIC_URL}/api/image/game?guesses=${game?.guesses}&word=${game?.word}&lifes=${game?.lifesLeft}&win=${game?.win}`,
+        postUrl: `${NEXT_PUBLIC_URL}/api/start-game`,
+      }),
+    );
   }
 
   return new NextResponse(
@@ -65,9 +79,12 @@ function hasWon(word: string, guesses: string): boolean {
   return true;
 }
 
-async function updateGameStates(game: Game, letter: string) {
+async function updateGameStates(game: Game, letter: string): Promise<Game> {
   if (game.guesses.includes(letter)) {
-    return;
+    return game;
+  }
+  if (game.win) {
+    return game;
   }
   game.guesses = game.guesses + letter;
   if (!game.word.includes(letter)) {
@@ -77,4 +94,6 @@ async function updateGameStates(game: Game, letter: string) {
     game.win = true;
   }
   await updateGame(game);
+
+  return game;
 }

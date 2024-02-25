@@ -5,7 +5,7 @@ import { connectToDB } from '../../services/database.services';
 import { createNewGame } from '../../services/games.services';
 import { Game, TOTAL_LIFES } from '../../models/game';
 
-const WORDS : string[] = [
+const WORDS: string[] = [
   'blockchain',
   'ethereum',
   'based',
@@ -21,8 +21,8 @@ const WORDS : string[] = [
   'memecoin',
   'coinbase',
   'uponly',
-  'altcoin'
-]
+  'altcoin',
+];
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   const body: FrameRequest = await req.json();
