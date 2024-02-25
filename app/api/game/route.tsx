@@ -7,7 +7,7 @@ import { getGame, updateGame } from '../../services/games.services';
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   const { searchParams } = new URL(req.url);
   const gameId = Number(searchParams.get('id')) || -1;
-  var game: Game | undefined;
+  let game: Game | undefined;
 
   const body: FrameRequest = await req.json();
   const { isValid, message } = await getFrameMessage(body, { neynarApiKey: 'NEYNAR_ONCHAIN_KIT' });
@@ -24,6 +24,8 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
   if (message?.input && game) {
     const letter = message.input.toLowerCase();
+    console.log(`event: gameId ${game.gameId}, letter: ${letter}, guesses: ${game.guesses}`);
+    console.log(game.guesses.has('a'));
 
     if (isLetter(letter)) {
       game.guesses.add(letter);
@@ -36,7 +38,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     if (hasWon(game.word, game.guesses)) {
       game.win = true;
     }
-    updateGame(game);
+    await updateGame(game);
   }
 
   const guessesString = game ? Array.from(game.guesses).join('') : '';
