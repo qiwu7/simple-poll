@@ -31,7 +31,7 @@ export async function GET(request: Request) {
         <div style={{ display: 'flex', marginTop: 40 }}>Lifes: {lifesLeft}</div>
         <div style={{ display: 'flex', marginTop: 40 }}>
           {word?.split('').map((letter, index) => {
-            return <div key={index}>{guesses?.includes(letter) ? letter : '_'}</div>;
+            return <div key={index}>{(guesses?.includes(letter) ? letter : '_') + ' '}</div>;
           })}
         </div>
         <div style={{ display: 'flex', marginTop: 40 }}>{guesses?.join(', ')}</div>
