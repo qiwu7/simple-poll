@@ -1,43 +1,31 @@
 import { FrameRequest, getFrameMessage, getFrameHtmlResponse } from '@coinbase/onchainkit';
 import { NextRequest, NextResponse } from 'next/server';
 import { NEXT_PUBLIC_URL } from '../../config';
-
-const word = 'hangman';
-const lifes = 5;
-
-var guesses = new Set<string>();
+import { collections } from '../../services/database.services';
+import Game from '../../models/game';
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   let accountAddress: string | undefined = '';
-  let guessesString = '';
 
   const body: FrameRequest = await req.json();
   const { isValid, message } = await getFrameMessage(body, { neynarApiKey: 'NEYNAR_ONCHAIN_KIT' });
 
   if (isValid) {
     accountAddress = message.interactor.verified_accounts[0];
-  }
 
-  if (message?.input) {
-    const letter = message.input.toLowerCase();
-    if (isLetter(letter)) {
-      guesses.add(letter);
-    }
-    const guessesArray = Array.from(guesses);
-    guessesString = guessesArray.join('');
+    const newGame: Game = new Game(1, accountAddress, 'hello', '', '', 5, 5, false);
+    const result = await collections.games?.insertOne(newGame);
+    console.log(result);
   }
 
   return new NextResponse(
     getFrameHtmlResponse({
       buttons: [
         {
-          label: `Last Guessed Letter: ${guesses}`,
-        },
-        {
           label: 'Submit',
         },
       ],
-      image: `${NEXT_PUBLIC_URL}/api/image/game?guesses=${guessesString}&word=${word}&lifes=${lifes}`,
+      image: `${NEXT_PUBLIC_URL}/api/image/game?guesses=&word=hello&lifes=5`,
       input: {
         text: 'Letter',
       },
