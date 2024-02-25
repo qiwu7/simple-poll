@@ -3,17 +3,19 @@ import { NextRequest, NextResponse } from 'next/server';
 import { NEXT_PUBLIC_URL } from '../../config';
 import { connectToDB } from '../../services/database.services';
 import { createNewGame } from '../../services/games.services';
+import Game from '../../models/game';
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   const body: FrameRequest = await req.json();
   const { isValid, message } = await getFrameMessage(body, { neynarApiKey: 'NEYNAR_ONCHAIN_KIT' });
+  var game: Game | undefined;
 
   if (isValid) {
     const accountAddress = message.interactor.verified_accounts[0];
     const fid: number = message.interactor.fid;
 
     await connectToDB();
-    const game = await createNewGame(fid, 'hangman');
+    game = await createNewGame(fid, 'hangman');
     console.log(game.gameId);
   }
 
@@ -24,11 +26,11 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           label: 'Submit',
         },
       ],
-      image: `${NEXT_PUBLIC_URL}/api/image/game?guesses=&word=hello&lifes=5`,
+      image: `${NEXT_PUBLIC_URL}/api/image/game?guesses=&word=${game?.word}&lifes=${game?.totalLifes}`,
       input: {
         text: 'Letter',
       },
-      postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
+      postUrl: `${NEXT_PUBLIC_URL}/api/game?id=${game?.gameId}`,
     }),
   );
 }

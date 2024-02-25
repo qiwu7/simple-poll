@@ -18,3 +18,25 @@ export async function createNewGame(playerId: number, word: string): Promise<Gam
   console.log(res?.insertedId);
   return game;
 }
+
+export async function getGame(playerId: number, gameId?: number): Promise<Game | undefined> {
+  await connectToDB();
+
+  if (gameId) {
+    return (await collections.games?.findOne({ gameId: gameId })) || undefined;
+  }
+
+  const res = await collections.games
+    ?.find({ playerId: playerId })
+    .sort({ gameId: -1 })
+    .limit(1)
+    .toArray();
+  if (res && res.length > 0) {
+    return res[0];
+  }
+}
+
+export async function updateGame(game: Game): Promise<Game | undefined> {
+  const res = await collections.games?.findOneAndReplace({ gameId: game.gameId }, game);
+  return res || undefined;
+}

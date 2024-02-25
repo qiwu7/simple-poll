@@ -10,6 +10,6 @@ export default class Game {
     public totalLifes: number,
     public lifesLeft: number,
     public win: boolean,
-    public id?: ObjectId,
+    public _id?: ObjectId,
   ) {}
 }
