@@ -5,6 +5,25 @@ import { connectToDB } from '../../services/database.services';
 import { createNewGame } from '../../services/games.services';
 import { Game, TOTAL_LIFES } from '../../models/game';
 
+const WORDS : string[] = [
+  'blockchain',
+  'ethereum',
+  'based',
+  'hangman',
+  'mining',
+  'decentralization',
+  'cryptocurrency',
+  'satoshi',
+  'smartcontract',
+  'frames',
+  'farcaster',
+  'stablecoin',
+  'memecoin',
+  'coinbase',
+  'uponly',
+  'altcoin'
+]
+
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   const body: FrameRequest = await req.json();
   const { isValid, message } = await getFrameMessage(body, { neynarApiKey: 'NEYNAR_ONCHAIN_KIT' });
@@ -15,8 +34,9 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     const fid: number = message.interactor.fid;
 
     await connectToDB();
-    game = await createNewGame(fid, 'hangman');
-    console.log(game.gameId);
+    const word = getRandomWord();
+    game = await createNewGame(fid, word);
+    console.log(`game ${game.gameId} started: ${word}`);
   }
 
   return new NextResponse(
@@ -41,6 +61,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
 export const dynamic = 'force-dynamic';
 
-function isLetter(str: string) {
-  return str.length === 1 && str.match(/[a-zA-Z]/i);
+function getRandomWord(): string {
+  const index = Math.floor(Math.random() * WORDS.length);
+  return WORDS[index];
 }
