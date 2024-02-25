@@ -26,7 +26,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           label: 'Submit',
         },
       ],
-      image: `${NEXT_PUBLIC_URL}/api/image/game?guesses=&word=${game?.word}&lifes=${game?.totalLifes}`,
+      image: `${NEXT_PUBLIC_URL}/api/image/game?guesses=&word=${game?.word}&lifes=${game?.totalLifes}&win=false`,
       input: {
         text: 'Letter',
       },

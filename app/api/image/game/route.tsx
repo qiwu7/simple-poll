@@ -7,6 +7,7 @@ export async function GET(request: Request) {
   const word = searchParams.get('word') || 'hangman';
   const guesses = searchParams.get('guesses')?.split('') || ['a', 'e'];
   const lifesLeft = Number(searchParams.get('lifes')) || 5;
+  const win : boolean = searchParams.get('win') === 'true';
 
   return new ImageResponse(
     (
@@ -33,6 +34,7 @@ export async function GET(request: Request) {
           })}
         </div>
         <div style={{ display: 'flex', marginTop: 40 }}>{guesses?.join(', ')}</div>
+        <div style={{ display: 'flex', marginTop: 40 }}>Win?: {win}</div>
       </div>
     ),
   );
