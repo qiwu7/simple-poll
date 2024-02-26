@@ -3,12 +3,11 @@ import { ImageResponse } from '@vercel/og';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
-  // ?word=<word>&guesses=<guesses>
-  const word = searchParams.get('word') || 'hangman';
-  const guesses = searchParams.get('guesses')?.split('') || ['a', 'e'];
-  const lifesLeft = Number(searchParams.get('lifes')) || 5;
-  const win = searchParams.get('win');
-  console.log(`win ${win}, win === true ${win === 'true'}`);
+  // ?word=<word>&guesses=<guesses>&lifes=<lifes>&win=<win>
+  const word = searchParams.get('word');
+  const guesses = searchParams.get('guesses')?.split('');
+  const lifesLeft = Number(searchParams.get('lifes'));
+  const win = searchParams.get('win') === 'true' ? true : false;
 
   return new ImageResponse(
     (
@@ -35,8 +34,18 @@ export async function GET(request: Request) {
           })}
         </div>
         <div style={{ display: 'flex', marginTop: 40 }}>{guesses?.join(', ')}</div>
-        <div style={{ display: 'flex', marginTop: 40 }}>Win?: {win}</div>
+        <div style={{ display: 'flex', marginTop: 40 }}>{gameState(win, lifesLeft)}</div>
       </div>
     ),
   );
+}
+
+function gameState(win: boolean, lifeLeft: number): string {
+  if (win) {
+    return 'You won';
+  } else if (lifeLeft <= 0) {
+    return 'You lost';
+  } else {
+    return 'Keep guessing';
+  }
 }

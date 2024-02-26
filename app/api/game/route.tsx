@@ -29,7 +29,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     }
   }
 
-  if (game?.win) {
+  if (game?.win || Number(game?.lifesLeft) <= 0) {
     return new NextResponse(
       getFrameHtmlResponse({
         buttons: [
